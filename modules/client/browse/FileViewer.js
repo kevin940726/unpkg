@@ -120,12 +120,36 @@ function BinaryViewer() {
   );
 }
 
+function HTMLViewer({ html }) {
+  return (
+    <article
+      className="markdown-body"
+      css={{
+        padding: 56
+      }}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
 export default function FileViewer({ path, details }) {
   const { packageName, packageVersion } = usePackageInfo();
-  const { highlights, uri, language, size } = details;
+  const { previewHTML, highlights, uri, language, size } = details;
 
   const segments = path.split('/');
   const filename = segments[segments.length - 1];
+
+  let viewer;
+
+  if (previewHTML) {
+    viewer = <HTMLViewer html={previewHTML} />;
+  } else if (highlights) {
+    viewer = <CodeListing highlights={highlights} />;
+  } else if (uri) {
+    viewer = <ImageViewer path={path} uri={uri} />;
+  } else {
+    viewer = <BinaryViewer />;
+  }
 
   return (
     <div
@@ -186,13 +210,7 @@ export default function FileViewer({ path, details }) {
         </a>
       </div>
 
-      {highlights ? (
-        <CodeListing highlights={highlights} />
-      ) : uri ? (
-        <ImageViewer path={path} uri={uri} />
-      ) : (
-        <BinaryViewer />
-      )}
+      {viewer}
     </div>
   );
 }

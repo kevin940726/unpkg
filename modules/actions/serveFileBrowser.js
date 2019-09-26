@@ -8,6 +8,7 @@ import getIntegrity from '../utils/getIntegrity.js';
 import { getPackage } from '../utils/npm.js';
 import getHighlights from '../utils/getHighlights.js';
 import getLanguageName from '../utils/getLanguageName.js';
+import getMarkdownHTML from '../utils/getMarkdownHTML.js';
 
 import serveBrowsePage from './serveBrowsePage.js';
 
@@ -76,6 +77,13 @@ async function serveFileBrowser(req, res) {
       entry.content.toString('utf8'),
       entry.path
     );
+  }
+
+  if (
+    req.filename.match(/^\/readme\.md$/i) &&
+    details.contentType === 'text/markdown'
+  ) {
+    details.previewHTML = await getMarkdownHTML(entry.content.toString('utf8'));
   }
 
   req.browseTarget = {

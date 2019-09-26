@@ -48,6 +48,10 @@ gtag('config', 'UA-140352188-1');`),
       e('title', null, title),
       x(promiseShim),
       x(fetchShim),
+      e('link', {
+        rel: 'stylesheet',
+        href: '/github-markdown-css@3.0.1/github-markdown.css'
+      }),
       data && x(`window.__DATA__ = ${encodeJSONForScript(data)}`)
     ),
     e(
