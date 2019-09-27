@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { formatBytes } from '../utils/format.js';
 import { createHTML } from '../utils/markup.js';
 
+import HTMLViewer from './HTMLViewer.js';
 import { usePackageInfo } from './PackageInfo.js';
 
 function getBasename(path) {
@@ -117,18 +118,6 @@ function BinaryViewer() {
     <div css={{ padding: 20 }}>
       <p css={{ textAlign: 'center' }}>No preview available.</p>
     </div>
-  );
-}
-
-function HTMLViewer({ html }) {
-  return (
-    <article
-      className="markdown-body"
-      css={{
-        padding: 56
-      }}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
   );
 }
 

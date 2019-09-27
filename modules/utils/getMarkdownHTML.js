@@ -1,14 +1,14 @@
 import unified from 'unified';
 import markdown from 'remark-parse';
-// import github from 'remark-github';
 import remark2rehype from 'remark-rehype';
 import html from 'rehype-stringify';
+import sanitize from 'rehype-sanitize';
 
 const processor = unified()
   .use(markdown)
-  // .use(github)
   .use(remark2rehype)
-  .use(html);
+  .use(html)
+  .use(sanitize);
 
 async function getMarkdownHTML(content) {
   try {

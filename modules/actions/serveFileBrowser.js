@@ -1,7 +1,6 @@
 import tar from 'tar-stream';
 
 import asyncHandler from '../utils/asyncHandler.js';
-import bufferStream from '../utils/bufferStream.js';
 import createDataURI from '../utils/createDataURI.js';
 import getContentType from '../utils/getContentType.js';
 import getIntegrity from '../utils/getIntegrity.js';
@@ -80,7 +79,8 @@ async function serveFileBrowser(req, res) {
   }
 
   if (
-    req.filename.match(/^\/readme\.md$/i) &&
+    (req.filename.match(/^\/readme\.md$/i) ||
+      req.filename.match(/^\/readme$/i)) &&
     details.contentType === 'text/markdown'
   ) {
     details.previewHTML = await getMarkdownHTML(entry.content.toString('utf8'));

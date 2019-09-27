@@ -143,7 +143,9 @@ export default function App({
 
   const breadcrumbs = [];
 
-  if (filename === '/') {
+  const isPackageRoot = filename === '/';
+
+  if (isPackageRoot) {
     breadcrumbs.push(packageName);
   } else {
     let url = `/browse/${packageName}@${packageVersion}`;
@@ -302,6 +304,12 @@ export default function App({
             ) : target.type === 'file' ? (
               <FileViewer path={target.path} details={target.details} />
             ) : null}
+
+            {isPackageRoot && (
+              <div css={{ marginTop: 24 }}>
+                <FileViewer path={target.readme.path} details={target.readme} />
+              </div>
+            )}
           </div>
         </div>
 

@@ -6,6 +6,8 @@ import bufferStream from '../utils/bufferStream.js';
 import getContentType from '../utils/getContentType.js';
 import getIntegrity from '../utils/getIntegrity.js';
 import { getPackage } from '../utils/npm.js';
+import getMarkdownHTML from '../utils/getMarkdownHTML.js';
+import getLanguageName from '../utils/getLanguageName.js';
 import serveBrowsePage from './serveBrowsePage.js';
 
 async function findMatchingEntries(stream, filename) {
@@ -50,6 +52,7 @@ async function findMatchingEntries(stream, filename) {
           entry.contentType = getContentType(entry.path);
           entry.integrity = getIntegrity(content);
           entry.size = content.length;
+          entry.content = content;
 
           entries[entry.path] = entry;
 
@@ -79,6 +82,29 @@ async function serveDirectoryBrowser(req, res) {
     type: 'directory',
     details: entries
   };
+
+  // At package root directory, find the README file and display it below
+  if (req.filename === '/') {
+    let readmePath = Object.keys(entries).find(
+      filePath =>
+        (filePath.match(/^\/readme\.md$/i) || filePath.match(/^\/readme$/i)) &&
+        entries[filePath].contentType === 'text/markdown'
+    );
+
+    if (readmePath) {
+      const entry = entries[readmePath];
+
+      entry.previewHTML = await getMarkdownHTML(entry.content.toString('utf8'));
+      entry.language = getLanguageName(readmePath);
+
+      req.browseTarget.readme = entry;
+    }
+  }
+
+  // Delete `content` to save some bytes while serving to the browser
+  Object.keys(entries).forEach(filePath => {
+    delete entries[filePath].content;
+  });
 
   serveBrowsePage(req, res);
 }
