@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-unresolved
 import entryManifest from 'entry-manifest';
 
-import { createElement, createScript } from './markup.js';
+import { createElement } from './markup.js';
 
 function getEntryPoint(name, format) {
   let entryPoints;
@@ -27,7 +27,7 @@ function getGlobalScripts(entryPoint, globalURLs) {
       }
     }
 
-    return createElement('script', { src: globalURLs[id] });
+    return createElement('script', { defer: true, src: globalURLs[id] });
   });
 }
 
@@ -37,6 +37,6 @@ export default function getScripts(entryName, format, globalURLs) {
   if (!entryPoint) return [];
 
   return getGlobalScripts(entryPoint, globalURLs).concat(
-    createScript(entryPoint.code)
+    createElement('script', { defer: true, src: entryPoint.url })
   );
 }
