@@ -21,7 +21,8 @@ const tableCellStyle = {
   paddingRight: 3,
   paddingBottom: 6,
   paddingLeft: 3,
-  borderTop: '1px solid #eaecef'
+  borderTop: '1px solid #eaecef',
+  wordBreak: 'break-word'
 };
 
 const iconCellStyle = {
@@ -35,8 +36,15 @@ const iconCellStyle = {
   }
 };
 
+const sizeCellStyle = {
+  ...tableCellStyle,
+  width: 120,
+  textAlign: 'right'
+};
+
 const typeCellStyle = {
   ...tableCellStyle,
+  width: 300,
   textAlign: 'right',
   paddingRight: 10,
   '@media (max-width: 700px)': {
@@ -60,7 +68,7 @@ export default function DirectoryViewer({ path, details: entries }) {
             ..
           </a>
         </td>
-        <td css={tableCellStyle}></td>
+        <td css={sizeCellStyle}></td>
         <td css={typeCellStyle}></td>
       </tr>
     );
@@ -96,7 +104,7 @@ export default function DirectoryViewer({ path, details: entries }) {
             {relName}
           </a>
         </td>
-        <td css={tableCellStyle}>-</td>
+        <td css={sizeCellStyle}>-</td>
         <td css={typeCellStyle}>-</td>
       </tr>
     );
@@ -118,7 +126,7 @@ export default function DirectoryViewer({ path, details: entries }) {
               {relName}
             </a>
           </td>
-          <td css={tableCellStyle}>{formatBytes(size)}</td>
+          <td css={sizeCellStyle}>{formatBytes(size)}</td>
           <td css={typeCellStyle}>{contentType}</td>
         </tr>
       );
@@ -142,6 +150,7 @@ export default function DirectoryViewer({ path, details: entries }) {
           borderCollapse: 'collapse',
           borderRadius: 2,
           background: '#fff',
+          tabelLayout: 'fixed',
           '@media (max-width: 700px)': {
             '& th + th + th + th, & td + td + td + td': {
               display: 'none'
@@ -151,16 +160,16 @@ export default function DirectoryViewer({ path, details: entries }) {
       >
         <thead>
           <tr>
-            <th>
+            <th css={[iconCellStyle, { padding: 0 }]}>
               <VisuallyHidden>Icon</VisuallyHidden>
             </th>
-            <th>
+            <th css={[tableCellStyle, { padding: 0 }]}>
               <VisuallyHidden>Name</VisuallyHidden>
             </th>
-            <th>
+            <th css={[sizeCellStyle, { padding: 0 }]}>
               <VisuallyHidden>Size</VisuallyHidden>
             </th>
-            <th>
+            <th css={[typeCellStyle, { padding: 0 }]}>
               <VisuallyHidden>Content Type</VisuallyHidden>
             </th>
           </tr>
