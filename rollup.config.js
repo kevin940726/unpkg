@@ -30,6 +30,9 @@ const client = ['browse', 'main'].map(entryName => {
         '@emotion/core': 'emotionCore'
       }
     },
+    treeshake: {
+      moduleSideEffects: false
+    },
     plugins: [
       manifest.record({ publicPath: '/_client/' }),
       babel({ exclude: /node_modules/ }),
