@@ -21,11 +21,11 @@ const globalURLs =
 
 export default function serveMainPage(req, res) {
   const content = createHTML(renderToString(createElement(MainApp)));
-  const elements = getScripts('main', 'iife', globalURLs);
+  const { head, body } = getScripts('main', 'iife', globalURLs);
 
   const html =
     doctype +
-    renderToStaticMarkup(createElement(MainTemplate, { content, elements }));
+    renderToStaticMarkup(createElement(MainTemplate, { content, head, body }));
 
   res
     .set({

@@ -44,7 +44,7 @@ async function serveBrowsePage(req, res) {
     target: req.browseTarget
   };
   const content = createHTML(renderToString(createElement(BrowseApp, data)));
-  const elements = getScripts('browse', 'iife', globalURLs);
+  const { head, body } = getScripts('browse', 'iife', globalURLs);
 
   const html =
     doctype +
@@ -54,7 +54,8 @@ async function serveBrowsePage(req, res) {
         description: `The CDN for ${req.packageName}`,
         data,
         content,
-        elements
+        head,
+        body
       })
     );
 

@@ -19,7 +19,8 @@ export default function MainTemplate({
   favicon = '/favicon.ico',
   data,
   content = h(''),
-  elements = []
+  head = [],
+  body = []
 }) {
   return e(
     'html',
@@ -48,13 +49,14 @@ gtag('config', 'UA-140352188-1');`),
       e('title', null, title),
       x(promiseShim),
       x(fetchShim),
-      data && x(`window.__DATA__ = ${encodeJSONForScript(data)}`)
+      ...head
     ),
     e(
       'body',
       null,
       e('div', { id: 'root', dangerouslySetInnerHTML: content }),
-      ...elements
+      data && x(`window.__DATA__ = ${encodeJSONForScript(data)}`),
+      ...body
     )
   );
 }
@@ -70,6 +72,7 @@ if (process.env.NODE_ENV !== 'production') {
     favicon: PropTypes.string,
     data: PropTypes.any,
     content: htmlType,
-    elements: PropTypes.arrayOf(PropTypes.node)
+    head: PropTypes.arrayOf(PropTypes.node),
+    body: PropTypes.arrayOf(PropTypes.node)
   };
 }

@@ -27,16 +27,25 @@ function getGlobalScripts(entryPoint, globalURLs) {
       }
     }
 
-    return createElement('script', { defer: true, src: globalURLs[id] });
+    return globalURLs[id];
   });
 }
+
+const PreloadScript = ({ url }) =>
+  createElement('link', { rel: 'preload', as: 'script', href: url });
+const Script = ({ url }) => createElement('script', { src: url });
 
 export default function getScripts(entryName, format, globalURLs) {
   const entryPoint = getEntryPoint(entryName, format);
 
   if (!entryPoint) return [];
 
-  return getGlobalScripts(entryPoint, globalURLs).concat(
-    createElement('script', { defer: true, src: entryPoint.url })
-  );
+  const globalScripts = getGlobalScripts(entryPoint, globalURLs);
+
+  const scripts = globalScripts.concat(entryPoint.url);
+
+  return {
+    head: scripts.map(url => createElement(PreloadScript, { url })),
+    body: scripts.map(url => createElement(Script, { url }))
+  };
 }
